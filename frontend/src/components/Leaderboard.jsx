@@ -8,6 +8,16 @@ import ClaimHistory from './ClaimHistory';
 import './Leaderboard.css';
 import axios from 'axios';
 
+// ✅ Move fallbackUsers outside the component so it's stable across renders
+const fallbackUsers = [
+  { _id: '1', name: 'PRITESH', points: 4200 },
+  { _id: '2', name: 'RIMJHIM RAJ', points: 3900 },
+  { _id: '3', name: 'KRISHU', points: 3700 },
+  { _id: '4', name: 'AVINASH', points: 3400 },
+  { _id: '5', name: 'RIYA', points: 3100 },
+  { _id: '6', name: 'DEVIL', points: 9999 }
+];
+
 function Leaderboard() {
   const [activeTab, setActiveTab] = useState('Party Ranking');
   const [activeSubTab, setActiveSubTab] = useState('Weekly Contribution');
@@ -15,27 +25,18 @@ function Leaderboard() {
   const [users, setUsers] = useState([]);
   const [refreshFlag, setRefreshFlag] = useState(false);
 
-  const fallbackUsers = [
-    { _id: '1', name: 'PRITESH', points: 4200 },
-    { _id: '2', name: 'RIMJHIM RAJ', points: 3900 },
-    { _id: '3', name: 'KRISHU', points: 3700 },
-    { _id: '4', name: 'AVINASH', points: 3400 },
-    { _id: '5', name: 'RIYA', points: 3100 },
-    { _id: '6', name: 'DEVIL', points: 9999 }
-  ];
-
- useEffect(() => {
-  axios.get('http://localhost:5000/users')
-    .then(res => {
-      const raw = Array.isArray(res.data) ? res.data : res.data.users || [];
-      const sorted = raw.length ? [...raw].sort((a, b) => b.points - a.points) : fallbackUsers;
-      setUsers(sorted);
-    })
-    .catch(() => {
-      console.error('Failed to fetch users — using fallback');
-      setUsers(fallbackUsers);
-    });
-}, [refreshFlag, fallbackUsers]); 
+  useEffect(() => {
+    axios.get('http://localhost:5000/users')
+      .then(res => {
+        const raw = Array.isArray(res.data) ? res.data : res.data.users || [];
+        const sorted = raw.length ? [...raw].sort((a, b) => b.points - a.points) : fallbackUsers;
+        setUsers(sorted);
+      })
+      .catch(() => {
+        console.error('Failed to fetch users — using fallback');
+        setUsers(fallbackUsers);
+      });
+  }, [refreshFlag, fallbackUsers]); // ✅ ESLint-safe: fallbackUsers is now stable
 
   const handleUserAdded = () => setRefreshFlag(prev => !prev);
   const handleUserSelect = id => setSelectedUserId(id);
