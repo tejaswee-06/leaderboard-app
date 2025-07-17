@@ -8,7 +8,7 @@ import ClaimHistory from './ClaimHistory';
 import './Leaderboard.css';
 import axios from 'axios';
 
-// ✅ Move fallbackUsers outside the component so it's stable across renders
+// Stable fallback data (outside component and effect)
 const fallbackUsers = [
   { _id: '1', name: 'PRITESH', points: 4200 },
   { _id: '2', name: 'RIMJHIM RAJ', points: 3900 },
@@ -36,7 +36,7 @@ function Leaderboard() {
         console.error('Failed to fetch users — using fallback');
         setUsers(fallbackUsers);
       });
-  }, [refreshFlag, fallbackUsers]); // ✅ ESLint-safe: fallbackUsers is now stable
+  }, [refreshFlag]); // ❌ Removed fallbackUsers to satisfy ESLint
 
   const handleUserAdded = () => setRefreshFlag(prev => !prev);
   const handleUserSelect = id => setSelectedUserId(id);
