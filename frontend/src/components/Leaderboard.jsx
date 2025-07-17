@@ -24,18 +24,18 @@ function Leaderboard() {
     { _id: '6', name: 'DEVIL', points: 9999 }
   ];
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/users')
-      .then(res => {
-        const raw = Array.isArray(res.data) ? res.data : res.data.users || [];
-        const sorted = raw.length ? [...raw].sort((a, b) => b.points - a.points) : fallbackUsers;
-        setUsers(sorted);
-      })
-      .catch(() => {
-        console.error('Failed to fetch users — using fallback');
-        setUsers(fallbackUsers);
-      });
-  }, [refreshFlag]);
+ useEffect(() => {
+  axios.get('http://localhost:5000/users')
+    .then(res => {
+      const raw = Array.isArray(res.data) ? res.data : res.data.users || [];
+      const sorted = raw.length ? [...raw].sort((a, b) => b.points - a.points) : fallbackUsers;
+      setUsers(sorted);
+    })
+    .catch(() => {
+      console.error('Failed to fetch users — using fallback');
+      setUsers(fallbackUsers);
+    });
+}, [refreshFlag, fallbackUsers]); 
 
   const handleUserAdded = () => setRefreshFlag(prev => !prev);
   const handleUserSelect = id => setSelectedUserId(id);
