@@ -31,11 +31,10 @@ body {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  padding: 2rem;
+  padding: 2rem; /* or 1.5rem — your call */
   width: 100%;
   max-width: 850px;
 }
-
 /* Headings */
 h1, h2, h3 {
   margin: 0;
